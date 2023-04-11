@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width='device-width', initial-scale=1.0" />
+    <title>Chatbot generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="font-sans font-medium">
+    <div class="flex flex-col w-1/2 mx-auto text-center my-24">
+      <h1
+        class="pb-8 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-8xl"
+      >
+        Build-a-<span
+          class="px-2 text-white bg-blue-600 rounded dark:bg-blue-400"
+          >bot</span
+        >
+      </h1>
+
+      <div class="flex flex-row justify-center mx-auto">
+        <button
+          id="lead"
+          class="w-1/8 rounded p-2 hover:bg-blue-400 hover:text-white transition duration-300 ease-in-out rounded p-2 hover:bg-blue-400 hover:text-white mx-5 my-1"
+        >
+          Lead generation</button
+        ><button
+          id="support"
+          class="w-1/8 transition duration-300 ease-in-out rounded p-2 hover:bg-blue-400 hover:text-white mx-5 my-1"
+        >
+          Customer support
+        </button>
+        <button
+          id="faq"
+          class="w-1/8 transition duration-300 ease-in-out rounded p-2 hover:bg-blue-400 hover:text-white mx-5 my-1"
+        >
+          Frequently asked questions
+        </button>
+        <button
+          id="recruit"
+          class="w-1/8 transition duration-300 ease-in-out rounded p-2 hover:bg-blue-400 hover:text-white mx-5 my-1"
+        >
+          Recruitment
+        </button>
+      </div>
+      <div class="flex flex-row justify-center mx-auto">
+        <button
+          id="funny"
+          class="transition duration-300 ease-in-out rounded p-2 hover:bg-blue-400 hover:text-white mx-5 my-1"
+        >
+          Funny</button
+        ><button
+          id="helpful"
+          class="transition duration-300 ease-in-out rounded p-2 hover:bg-blue-400 hover:text-white mx-5 my-1"
+        >
+          Helpful
+        </button>
+        <button
+          id="professional"
+          class="transition duration-300 ease-in-out rounded p-2 hover:bg-blue-400 hover:text-white mx-5 my-1"
+        >
+          Professional
+        </button>
+      </div>
+      <div class="flex flex-row justify-center mx-auto">
+        <button
+          class="transition duration-300 ease-in-out rounded p-2 hover:bg-blue-400 hover:text-white mx-5 my-1"
+          id="inpage"
+        >
+          InPage</button
+        ><button
+          class="transition duration-300 ease-in-out rounded p-2 hover:bg-blue-400 hover:text-white mx-5 my-1"
+          id="chatbot"
+        >
+          ChatBot
+        </button>
+      </div>
+      <div class="my-5 w-1/2 mx-auto text-center flex flex-col">
+        <input
+          type="text"
+          id="industry"
+          placeholder="Enter industry name"
+          class="mx-auto block w-1/2 p-4 text-center text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500my-5 rounded border mb-5"
+        />
+        <input
+          type="text"
+          class="mx-auto block w-full p-4 text-center text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500my-5 rounded border"
+          placeholder="Enter additional discussion points"
+          id="message"
+        />
+        <button
+          class="w-1/2 mx-auto transition duration-300 ease-in-out rounded p-2 hover:bg-blue-400 hover:text-white mx-5 my-6"
+          id="submit"
+        >
+          Generate
+        </button>
+        <div id="chatlog"></div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
