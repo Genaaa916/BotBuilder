@@ -32,7 +32,8 @@ app.post('/choices', async (req, res) => {
 
 app.post('/chat', async (req, res) => {
     const prompt = req.body.msg_array
-    const instructions = {botType: choiceData[0].bot.toLowerCase(), useCase: choiceData[0].useCase.toLowerCase(), tone: choiceData[0].tone.toLowerCase(), industry: choiceData[0].industry}
+    const choices = choiceData[0]
+    const instructions = {botType: choices.bot.toLowerCase(), industry:choices.industry.toLowerCase(), useCase: choices.useCase.toLowerCase(), tone:choices.tone.toLowerCase(), additional: choices.additional.toLowerCase()}
     //systemMsg is the instructions for the chatbot, it should vary depending on user choices on the site.
     let systemMsg = `You are a chatbot generator. You build JSON objects that represent chatbots. The structure for a chatbot is as follows:\n \
     \n \
@@ -42,7 +43,7 @@ The answer options can have max 7 words. Mention the use case, tone and industry
 Also personalise the message based on discussion points, which the user will specify in their message.\n \
 This map shows which type defines which type of node, use integer values instead of text. {"multiplechoice answers":14,"dropdown menu answers":15,"singlechoice answers":11,"openfield answers":5}\n \
 Here's an example structure of the bot JSON: \n \
-{"originMode":"inpage","payload":[{"nodeData":{"type":11,"text":"Greeting","left":1000,"top":200,"key":"1","answers":[]},"type":"question"},{"nodeData":{"type":11,"text":"Question","left":550,"top":200,"answers":[{"id":1,"text":"Answer"},{"id":2,"text":"Answer"},{"id":3,"text":"Answer"},{"id":4,"text":"Answer"}],"key":"2"},"type":"question"},{"nodeData":{"type":11,"text":"Question","left":100,"top":200,"key":"3","answers":[]},"type":"question"}],"connections":{"1":"2","2":"3","start":"1"},"companyId":2318}
+{"originMode":"${instructions.botType}","payload":[{"nodeData":{"type":11,"text":"Greeting","left":1000,"top":200,"key":"1","answers":[]},"type":"question"},{"nodeData":{"type":11,"text":"Question","left":550,"top":200,"answers":[{"id":1,"text":"Answer"},{"id":2,"text":"Answer"},{"id":3,"text":"Answer"},{"id":4,"text":"Answer"}],"key":"2"},"type":"question"},{"nodeData":{"type":11,"text":"Question","left":100,"top":200,"key":"3","answers":[]},"type":"question"}],"connections":{"1":"2","2":"3","start":"1"},"companyId":2318}
 `
     const completion = await openai.createChatCompletion({
         model : "gpt-3.5-turbo",

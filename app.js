@@ -2,6 +2,7 @@
 let msg_array = []
 const chatlog = document.getElementById("chatlog");
 const industry = document.getElementById("industry")
+const addInfo = document.getElementById("add")
 const message = document.getElementById("message");
 const submit = document.getElementById("submit");
 const botBtn = [document.getElementById("inpage"), document.getElementById("chatbot")]
@@ -46,7 +47,8 @@ const copyToClip = (string, parent) => {
       }
 } 
 
-//don't look at this mess, i should've used radio buttons instead of doing this foreach loop monstrosity :'))
+//callback mess, shouldve used radio buttons instead :') 
+//makes sure only one button of a buttongroup is toggled
 const allButtons = [botBtn, useCaseBtn, toneBtn]
 allButtons.forEach(group => { 
 group.forEach(button => {
@@ -69,10 +71,10 @@ group.forEach(button => {
 const rememberUserChoice = (key, button) => {
     button.addEventListener("click", (e) => {
     e.preventDefault();
-    //for running in nodejs
+    //for running in node
     userChoice[key] = button.innerText;
     //for running in the browser w/ sessiondata
-    window.sessionStorage.setItem(key, btoa(button.innerText));
+    window.sessionStorage.setItem(key, button.innerText);
     }
 )}
 
@@ -84,9 +86,10 @@ toneBtn.forEach((button) => rememberUserChoice("tone", button));
 
 submit.addEventListener("click", (e) => {
   userChoice["industry"] = industry.value
-//for sending values to nodejs
-sendUserChoice();
+  userChoice["additional"] = add.value
 
+//for sending choices to BE
+sendUserChoice();
 e.preventDefault();
 const msg = message.value;
 const newMsg = {"role": "user", "content": `${msg}`}
@@ -115,9 +118,10 @@ msgElement.innerHTML = `<div class="msg-text">${msg}</div>`;
       msg_array.push(newMsg)
       const msgElement = document.createElement("div");
       msgElement.classList.add(["message", "message-received"]);
-      msgElement.innerHTML = `<div class="msg-text my-5 font-semibold">${reply}</div>`;
+      msgElement.innerHTML = `<div class="msg-text m-5 md:mx-8 font-semibold">${reply}</div>`;
       chatlog.appendChild(msgElement);
       chatlog.scrollTop = chatlog.scrollHeight;
+      window.scrollTo(0, document.body.scrollHeight)
       copyToClip(reply, chatlog)
       });
   
