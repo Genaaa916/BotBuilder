@@ -35,7 +35,7 @@ app.post('/chat', async (req, res) => {
     const instructions = {botType: choiceData[0].bot.toLowerCase(), useCase: choiceData[0].useCase.toLowerCase(), tone: choiceData[0].tone.toLowerCase(), industry: choiceData[0].industry}
     //systemMsg is the instructions for the chatbot, it should vary depending on user choices on the site.
     let systemMsg = `You are a chatbot generator. You build JSON objects that represent chatbots. The structure for a chatbot is as follows:\n \
-    IMPORTANT: ALWAYS insert JSON within square brackets [].\n \
+    \n \
     There may be additional instructions for the topic of the chatbot, they are listed in the user message. \n \
 Your goal is to create the chatbot for the use case: ${instructions.useCase} in a ${instructions.tone} tone for the ${instructions.industry} industry. I would hope the chatbot would start with the following discussion points: [discussion points]. \n \
 The answer options can have max 7 words. Mention the use case, tone and industry back to the user. \n \

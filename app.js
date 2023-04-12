@@ -24,6 +24,28 @@ const sendUserChoice = () => {
   })
 }
 
+const copyToClip = (string, parent) => {
+  const regex = /\{.+\}/gs
+      if (string.match(regex)){
+        console.log({"JSON found": string.match(regex)})
+        const copyString = string.match(regex)
+        const copyButton = document.createElement("button")
+        copyButton.textContent = "Copy to clipboard";
+        parent.appendChild(copyButton)
+        copyButton.scrollTop = parent.scrollHeight
+        const classesToAdd = ["w-1/2", "mx-auto", "transition", "duration-300", "ease-in-out", "rounded", "p-2", "hover:bg-blue-400", "hover:text-white", "mx-5", "my-2"]
+        classesToAdd.forEach(cls => {
+          copyButton.classList.add(cls)
+        })
+        copyButton.addEventListener("click", () => {
+          navigator.clipboard.writeText(copyString)
+          const copiedText = document.createElement("p")
+          copiedText.innerHTML = "Copied! Now just paste into the Bot Builder!"
+          chatlog.appendChild(copiedText)
+        } )
+      }
+} 
+
 //don't look at this mess, i should've used radio buttons instead of doing this foreach loop monstrosity :'))
 const allButtons = [botBtn, useCaseBtn, toneBtn]
 allButtons.forEach(group => { 
@@ -96,10 +118,7 @@ msgElement.innerHTML = `<div class="msg-text">${msg}</div>`;
       msgElement.innerHTML = `<div class="msg-text my-5 font-semibold">${reply}</div>`;
       chatlog.appendChild(msgElement);
       chatlog.scrollTop = chatlog.scrollHeight;
-    const regex = /\[(.*?)\]/
-      if (reply.match(regex)){
-        console.log("JSON FOUND YAY")
-      }
+      copyToClip(reply, chatlog)
       });
   
 });
