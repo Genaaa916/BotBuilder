@@ -81,10 +81,12 @@ const rememberUserChoice = (key, button) => {
     }
 )}
 
+allButtons.forEach(group => {
+  group.forEach(element => {
+    rememberUserChoice(element.name, element)
+  });
+})
 
-botBtn.forEach((button) => rememberUserChoice("bot", button));
-useCaseBtn.forEach((button) => rememberUserChoice("useCase", button));
-toneBtn.forEach((button) => rememberUserChoice("tone", button));
 
 
 submit.addEventListener("click", (e) => {
