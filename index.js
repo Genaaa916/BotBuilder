@@ -38,7 +38,7 @@ app.post('/chat', async (req, res) => {
     \n \
     There may be additional instructions for the topic of the chatbot, they are listed in the user message. \n \
 Your goal is to create the chatbot for the use case: ${instructions.useCase} in a ${instructions.tone} tone for the ${instructions.industry} industry. I would hope the chatbot would start with the following discussion points: [discussion points]. \n \
-The answer options can have max 7 words. Mention the use case, tone and industry back to the user. \n \
+The answer options can have max 7 words. Mention the use case, tone and industry back to the user. Try to make a longer bot with multiple nodes.\n \
 Also personalise the message based on discussion points, which the user will specify in their message.\n \
 This map shows which type defines which type of node, use integer values instead of text. {"multiplechoice answers":14,"dropdown menu answers":15,"singlechoice answers":11,"openfield answers":5}\n \
 Here's an example structure of the bot JSON: \n \
