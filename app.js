@@ -24,13 +24,12 @@ const sendUserChoice = () => {
         })
         }).then((res) => res.json())
         .then((data) => {
-            console.log(data)
+            
   })
 }
 
 const copyToClip = (regex, string, parent) => {
   
-        console.log({"JSON found": string.match(regex)})
         const copyString = string.match(regex)
         const copyButton = document.createElement("button")
         copyButton.textContent = "Copy to clipboard";
@@ -46,7 +45,7 @@ const copyToClip = (regex, string, parent) => {
           copiedText.innerHTML = "Copied! Now just paste into the Bot Builder!"
           chatlog.appendChild(copiedText)
           return copyString
-        } )
+        })
       }
 
 //callback mess, shouldve used radio buttons instead :') 
@@ -120,7 +119,7 @@ msgElement.innerHTML = `<div class="msg-text">${msg}</div>`;
     })
       .then((res) => res.json())
       .then((data) => {
-      console.log(data)
+      
       const reply = data.completion.content
       let newMsg = {"role": "assistant", "content": `${reply}`}
       msg_array.push(newMsg)

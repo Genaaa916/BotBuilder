@@ -25,7 +25,6 @@ app.post('/choices', async (req, res) => {
     const userChoice = req.body.userChoice;
     res.json({userChoice: userChoice})
     choiceData.push(userChoice)
-    console.log(choiceData)
 })
 
 
@@ -45,7 +44,6 @@ This map shows which type defines which type of node, use integer values instead
 Here's an example structure of the bot JSON: \n \
 {"originMode":"${instructions.botType}","payload":[{"nodeData":{"type":11,"text":"Greeting","left":1000,"top":200,"key":"1","answers":[]},"type":"question"},{"nodeData":{"type":11,"text":"Question","left":550,"top":200,"answers":[{"id":1,"text":"Answer"},{"id":2,"text":"Answer"},{"id":3,"text":"Answer"},{"id":4,"text":"Answer"}],"key":"2"},"type":"question"},{"nodeData":{"type":11,"text":"Question","left":100,"top":200,"key":"3","answers":[]},"type":"question"}],"connections":{"1":"2","2":"3","start":"1"},"companyId":2318}
 `
-    try {
         const completion = await openai.createChatCompletion({
         model : "gpt-3.5-turbo",
         messages : [
@@ -54,14 +52,6 @@ Here's an example structure of the bot JSON: \n \
           ]
         })
     res.json({completion: completion.data.choices[0].message})
-    console.log(completion.data.choices[0].message)
-    }
-    catch(e){
-        console.log(e)
-    }
-    
-    
-
 })
 
 app.listen(port, () => {
