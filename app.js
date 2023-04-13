@@ -41,8 +41,8 @@ const copyToClip = (regex, string, parent) => {
           const copiedText = document.createElement("p")
           copiedText.innerHTML = "Copied! Now just paste into the Bot Builder!"
           chatlog.appendChild(copiedText)
-          return copyString
         })
+        return copyString
       }
 
 //callback mess, shouldve used radio buttons instead :') 
@@ -122,12 +122,15 @@ msgElement.innerHTML = `<div class="msg-text">${msg}</div>`;
       msg_array.push(newMsg)
       const msgElement = document.createElement("div");
       msgElement.classList.add(["message", "message-received"]);
-      msgElement.innerHTML = `<div class="msg-text m-5 md:mx-8 font-semibold">${reply}</div>`;
+      if (!reply.match(regex)){
+        msgElement.innerHTML = `<div class="msg-text m-5 md:mx-8 font-semibold">${reply}</div>`
+      } 
       chatlog.appendChild(msgElement);
       chatlog.scrollTop = chatlog.scrollHeight;
       window.scrollTo(0, document.body.scrollHeight)
       if (reply.match(regex)){
-        copyToClip(regex, reply, chatlog)
+        const remove = copyToClip(regex, reply, chatlog)
+        msgElement.innerHTML = `<div class="msg-text m-5 md:mx-8 font-semibold">${reply.replace(remove, "")}</div>` 
       }
       });
   
