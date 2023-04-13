@@ -6,6 +6,8 @@
 
 ### 2. Store your API key in it.
 
+OPENAI_API_KEY = your_api_key
+
 ### 3. Run `npm install` to install dependencies
 
 ### 4. Run `npm run dev`
