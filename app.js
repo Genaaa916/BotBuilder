@@ -45,8 +45,7 @@ const copyToClip = (regex, string, parent) => {
         return copyString
       }
 
-//callback mess, shouldve used radio buttons instead :') 
-//makes sure only one button of a buttongroup is toggled
+//this callback mess makes sure only one button of a buttongroup is toggled
 const allButtons = [botBtn, useCaseBtn, toneBtn]
 allButtons.forEach(group => { 
 group.forEach(button => {
@@ -66,7 +65,6 @@ group.forEach(button => {
 
 })
 
-//func works but is wet, refactor to make sense
 const rememberUserChoice = (key, button) => {
     button.addEventListener("click", (e) => {
     e.preventDefault();

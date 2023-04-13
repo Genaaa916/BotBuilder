@@ -40,6 +40,7 @@ app.post('/chat', async (req, res) => {
 Your goal is to create the chatbot for the use case: ${instructions.useCase} in a ${instructions.tone} tone for the ${instructions.industry} industry. I would hope the chatbot would start with the following discussion points: [discussion points]. \n \
 The answer options can have max 7 words. Mention the use case, tone and industry back to the user. Try to make a longer bot with multiple nodes.\n \
 Also personalise the message based on discussion points, which the user will specify in their message.\n \
+Please consider this additional information if there is any: ${instructions.additional}\n \
 This map shows which type defines which type of node, use integer values instead of text. {"multiplechoice answers":14,"dropdown menu answers":15,"singlechoice answers":11,"openfield answers":5}\n \
 Here's an example structure of the bot JSON: \n \
 {"originMode":"${instructions.botType}","payload":[{"nodeData":{"type":11,"text":"Greeting","left":1000,"top":200,"key":"1","answers":[]},"type":"question"},{"nodeData":{"type":11,"text":"Question","left":550,"top":200,"answers":[{"id":1,"text":"Answer"},{"id":2,"text":"Answer"},{"id":3,"text":"Answer"},{"id":4,"text":"Answer"}],"key":"2"},"type":"question"},{"nodeData":{"type":11,"text":"Question","left":100,"top":200,"key":"3","answers":[]},"type":"question"}],"connections":{"1":"2","2":"3","start":"1"},"companyId":2318}
