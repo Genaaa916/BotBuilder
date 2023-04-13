@@ -23,9 +23,6 @@ const sendUserChoice = () => {
             userChoice
         })
         }).then((res) => res.json())
-        .then((data) => {
-            
-  })
 }
 
 const copyToClip = (regex, string, parent) => {
