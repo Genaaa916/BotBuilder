@@ -2,13 +2,16 @@
 let msg_array = []
 const chatlog = document.getElementById("chatlog");
 const industry = document.getElementById("industry")
-const addInfo = document.getElementById("add")
+const addchoiceSent= document.getElementById("add")
 const message = document.getElementById("message");
 const submit = document.getElementById("submit");
 const botBtn = [document.getElementById("inpage"), document.getElementById("chatbot")]
 const useCaseBtn = [document.getElementById("recruit"), document.getElementById("faq"), document.getElementById("support"), document.getElementById("lead")]
 const toneBtn = [document.getElementById("funny"), document.getElementById("helpful"), document.getElementById("professional")]
 const userChoice = {}
+const regex = /\{.+\}/gs
+let choiceSent = false
+
 
 const sendUserChoice = () => {
     fetch("http://localhost:3000/choices", {
@@ -25,9 +28,8 @@ const sendUserChoice = () => {
   })
 }
 
-const copyToClip = (string, parent) => {
-  const regex = /\{.+\}/gs
-      if (string.match(regex)){
+const copyToClip = (regex, string, parent) => {
+  
         console.log({"JSON found": string.match(regex)})
         const copyString = string.match(regex)
         const copyButton = document.createElement("button")
@@ -43,9 +45,9 @@ const copyToClip = (string, parent) => {
           const copiedText = document.createElement("p")
           copiedText.innerHTML = "Copied! Now just paste into the Bot Builder!"
           chatlog.appendChild(copiedText)
+          return copyString
         } )
       }
-} 
 
 //callback mess, shouldve used radio buttons instead :') 
 //makes sure only one button of a buttongroup is toggled
@@ -55,6 +57,7 @@ group.forEach(button => {
   button.addEventListener('click', () => {
     button.classList.add('bg-black');
     button.classList.add('text-white');
+    choiceSent = false
 
     group.forEach(otherButton => {
       if (otherButton !== button) {
@@ -89,7 +92,10 @@ submit.addEventListener("click", (e) => {
   userChoice["additional"] = add.value
 
 //for sending choices to BE
-sendUserChoice();
+if(!choiceSent){
+  sendUserChoice()
+  choiceSent = true
+}
 e.preventDefault();
 const msg = message.value;
 const newMsg = {"role": "user", "content": `${msg}`}
@@ -122,7 +128,9 @@ msgElement.innerHTML = `<div class="msg-text">${msg}</div>`;
       chatlog.appendChild(msgElement);
       chatlog.scrollTop = chatlog.scrollHeight;
       window.scrollTo(0, document.body.scrollHeight)
-      copyToClip(reply, chatlog)
+      if (reply.match(regex)){
+        copyToClip(regex, reply, chatlog)
+      }
       });
   
 });
