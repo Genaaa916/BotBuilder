@@ -1,4 +1,3 @@
-
 let msg_array = []
 const chatlog = document.getElementById("chatlog");
 const industry = document.getElementById("industry")
@@ -37,7 +36,7 @@ const copyToClip = (regex, string, parent) => {
           copyButton.classList.add(cls)
         })
         copyButton.addEventListener("click", () => {
-          navigator.clipboard.writeText(copyString)
+          navigator.clipboard.writeText(addFields(copyString))
           const copiedText = document.createElement("p")
           copiedText.innerHTML = "Copied! Now just paste into the Bot Builder!"
           chatlog.appendChild(copiedText)
@@ -45,7 +44,14 @@ const copyToClip = (regex, string, parent) => {
         return copyString
       }
 
-//this callback mess makes sure only one button of a buttongroup is toggled
+const addFields = (json) => {
+  const addable = {"field": 1}
+for(i in json.payload){
+  json.payload[i].nodeData = {...json.payload[i].nodeData, addable}
+  } 
+return json
+}
+
 const allButtons = [botBtn, useCaseBtn, toneBtn]
 allButtons.forEach(group => { 
 group.forEach(button => {
@@ -87,7 +93,7 @@ submit.addEventListener("click", (e) => {
   userChoice["industry"] = industry.value
   userChoice["additional"] = add.value
 
-//for sending choices to BE
+
 if(!choiceSent){
   sendUserChoice()
   choiceSent = true
@@ -128,7 +134,7 @@ msgElement.innerHTML = `<div class="msg-text">${msg}</div>`;
       window.scrollTo(0, document.body.scrollHeight)
       if (reply.match(regex)){
         const remove = copyToClip(regex, reply, chatlog)
-        msgElement.innerHTML = `<div class="msg-text m-5 md:mx-8 font-semibold">${reply.replace(remove, "")}</div>` 
+        msgElement.innerHTML = `<div class="msg-text m-5 md:mx-8 font-semibold">${reply.replace(remove, "").replace(/'{2,3}/g, "")}</div>` 
       }
       });
   

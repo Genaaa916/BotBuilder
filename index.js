@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import fs from 'fs';
 
 
 dotenv.config();
@@ -10,7 +11,7 @@ let choiceData = []
 const config = new Configuration ({
     organization: "",
     apiKey : process.env.OPENAI_API_KEY,
-    })
+})
 const openai = new OpenAIApi(config);
 
 const app = express();
@@ -19,43 +20,57 @@ app.use(cors());
 app.use(bodyParser.json());
 
 
+
 //for running in nodejs
 app.post('/choices', async (req, res) => {
     choiceData = []
     const userChoice = req.body.userChoice;
     res.json({userChoice: userChoice})
     choiceData.push(userChoice)
+    console.log(userChoice)
 })
-
 
 
 app.post('/chat', async (req, res) => {
     const prompt = req.body.msg_array
-    const choices = choiceData[0]
-    const instructions = {botType: choices.bot.toLowerCase(), industry:choices.industry.toLowerCase(), useCase: choices.useCase.toLowerCase(), tone:choices.tone.toLowerCase(), additional: choices.additional.toLowerCase()}
+    const instructions = {botType: choiceData[0].bot.toLowerCase(), 
+        industry: choiceData[0].industry.toLowerCase(), 
+        useCase: choiceData[0].useCase.toLowerCase(), 
+        tone:choiceData[0].tone.toLowerCase(), 
+        additional: choiceData[0].additional.toLowerCase()
+    }
+    
+const getExampleJSON = async filePath => {
+  try {
+    const data = await fs.promises.readFile(filePath, 'utf8')
+    return JSON.stringify(data).replace("inpage", instructions.botType).replaceAll("\\", "")
+  }
+  catch(err) {
+    console.log(err)
+  }
+}
+
+
+instructions.example = await getExampleJSON('example.json')
+
+    
     //systemMsg is the instructions for the chatbot, it should vary depending on user choices on the site.
-    let systemMsg = `You are a chatbot generator. You build JSON objects that represent chatbots. The structure for a chatbot is as follows:\n \
-    \n \
-    There may be additional instructions for the topic of the chatbot, they are listed in the user message. \n \
-Your goal is to create the chatbot for the use case: ${instructions.useCase} in a ${instructions.tone} tone for the ${instructions.industry} industry. I would hope the chatbot would start with the following discussion points: [discussion points]. \n \
-The answer options can have max 7 words. Mention the use case, tone and industry back to the user. Try to make a longer bot with multiple nodes.\n \
-Also personalise the message based on discussion points, which the user will specify in their message.\n \
-Please consider this additional information if there is any: ${instructions.additional}\n \
-This map shows which type defines which type of node, use integer values instead of text. {"multiplechoice answers":14,"dropdown menu answers":15,"singlechoice answers":11,"openfield answers":5}\n \
-Here's an example structure of the bot JSON: \n \
-{"originMode":"${instructions.botType}","payload":[{"nodeData":{"type":11,"text":"Greeting","left":1000,"top":200,"key":"1","answers":[]},"type":"question"},{"nodeData":{"type":11,"text":"Question","left":550,"top":200,"answers":[{"id":1,"text":"Answer"},{"id":2,"text":"Answer"},{"id":3,"text":"Answer"},{"id":4,"text":"Answer"}],"key":"2"},"type":"question"},{"nodeData":{"type":11,"text":"Question","left":100,"top":200,"key":"3","answers":[]},"type":"question"}],"connections":{"1":"2","2":"3","start":"1"},"companyId":2318}
-`
+let systemMsg = `Pretend you're a program that generates JSON templates for chatbots to follow. The user wants to implement a ${instructions.useCase} chatbot on their website. The conversation of the chatbot should be in a ${instructions.tone} tone. Their company is in the ${instructions.industry} industry. The user may have some discussion points in mind, which will be listed at the end of the prompt. Your output should be valid JSON, specifically it should mirror the structure of this JSON file ${instructions.example}
+Please note that node types dictate what the purpose of a node is and is mapped like this: {"multiplechoice answers":14,"dropdown menu answers":15,"singlechoice answers":11,"openfield answers":5}. Note that only singlechoice answers can branch out to multiple alternative questions. Also make sure you generate at least 8 nodes. Make sure the JSON you generate is minified. Generate the JSON file now.`
+console.log(systemMsg)
+console.log(req.body)
         const completion = await openai.createChatCompletion({
         model : "gpt-3.5-turbo",
         messages : [
             {role: "system", content: systemMsg},
             ...prompt
-          ]
-        })
+        ]
+    })
     res.json({completion: completion.data.choices[0].message})
 })
 
 app.listen(port, () => {
 console.log(`Example app listening at http://localhost:${port}`)
 })
+
 
