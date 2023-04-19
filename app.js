@@ -1,4 +1,3 @@
-
 let msg_array = []
 const chatlog = document.getElementById("chatlog");
 const industry = document.getElementById("industry")
@@ -19,158 +18,162 @@ const sendUserChoice = () => {
     fetch("http://localhost:3000/choices", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+            "Content-Type": "application/json",
         },
         body: JSON.stringify({
             userChoice
         })
-        }).then((res) => res.json())
+    }).then((res) => res.json())
 }
 
 const copyToClip = (regex, string, parent) => {
-  
-        const copyString = string.match(regex)
-        const copyButton = document.createElement("button")
-        copyButton.textContent = "Copy to clipboard";
-        parent.appendChild(copyButton)
-        copyButton.scrollTop = parent.scrollHeight
-        const classesToAdd = ["w-1/2", "mx-auto", "transition", "duration-300", "ease-in-out", "rounded", "p-2", "hover:bg-blue-400", "hover:text-white", "mx-5", "my-2"]
-        classesToAdd.forEach(cls => {
-          copyButton.classList.add(cls)
-        })
-        copyButton.addEventListener("click", () => {
-          navigator.clipboard.writeText(copyString)
-          const copiedText = document.createElement("p")
-          copiedText.innerHTML = "Copied! Now just paste into the Bot Builder!"
-          chatlog.appendChild(copiedText)
-        })
-        return copyString
-      }
+
+    const copyString = string.match(regex)
+    const copyButton = document.createElement("button")
+    copyButton.textContent = "Copy to clipboard";
+    parent.appendChild(copyButton)
+    copyButton.scrollTop = parent.scrollHeight
+    const classesToAdd = ["w-1/2", "mx-auto", "transition", "duration-300", "ease-in-out", "rounded", "p-2", "hover:bg-blue-400", "hover:text-white", "mx-5", "my-2"]
+    classesToAdd.forEach(cls => {
+        copyButton.classList.add(cls)
+    })
+    copyButton.addEventListener("click", () => {
+        navigator.clipboard.writeText(copyString)
+        const copiedText = document.createElement("p")
+        copiedText.innerHTML = "Copied! Now just paste into the Bot Builder!"
+        chatlog.appendChild(copiedText)
+    })
+    return copyString
+}
 
 
 const allButtons = [botBtn, useCaseBtn, toneBtn]
-allButtons.forEach(group => { 
-group.forEach(button => {
-  button.addEventListener('click', () => {
-    button.classList.add('bg-black');
-    button.classList.add('text-white');
-    choiceSent = false
+allButtons.forEach(group => {
+    group.forEach(button => {
+        button.addEventListener('click', () => {
+            button.classList.add('bg-black');
+            button.classList.add('text-white');
+            choiceSent = false
 
-    group.forEach(otherButton => {
-      if (otherButton !== button) {
-        otherButton.classList.remove('bg-black');
-        otherButton.classList.remove('text-white');
-      }
+            group.forEach(otherButton => {
+                if (otherButton !== button) {
+                    otherButton.classList.remove('bg-black');
+                    otherButton.classList.remove('text-white');
+                }
+            });
+        });
     });
-  });
-});
 
 })
 
 const rememberUserChoice = (key, button) => {
     button.addEventListener("click", (e) => {
-    e.preventDefault();
-    //for running in node
-    userChoice[key] = button.innerText;
-    //for running in the browser w/ sessiondata
-    window.sessionStorage.setItem(key, button.innerText);
-    }
-)}
+        e.preventDefault();
+        //for running in node
+        userChoice[key] = button.innerText;
+        //for running in the browser w/ sessiondata
+        window.sessionStorage.setItem(key, button.innerText);
+    })
+}
 
 allButtons.forEach(group => {
-  group.forEach(element => {
-    rememberUserChoice(element.name, element)
-  });
+    group.forEach(element => {
+        rememberUserChoice(element.name, element)
+    });
 })
 
 
 
 submit.addEventListener("click", (e) => {
-  userChoice["industry"] = industry.value
-  userChoice["additional"] = add.value
-if(!choiceSent){
-  sendUserChoice()
-  choiceSent = true
-}
-e.preventDefault();
-const msg = message.value;
-const newMsg = {"role": "user", "content": `${msg}`}
-/* msg_array.push(newMsg) */
-message.value = "";
-const msgElement = document.createElement("div");
-msgElement.classList.add(["message", "message-sent"]);
-msgElement.innerHTML = `<div class="msg-text">${msg}</div>`;
+    userChoice["industry"] = industry.value
+    userChoice["additional"] = add.value
+    if (!choiceSent) {
+        sendUserChoice()
+        choiceSent = true
+    }
+    e.preventDefault();
+    const msg = message.value;
+    const newMsg = {
+        "role": "user",
+        "content": `${msg}`
+    }
+    /* msg_array.push(newMsg) */
+    message.value = "";
+    const msgElement = document.createElement("div");
+    msgElement.classList.add(["message", "message-sent"]);
+    msgElement.innerHTML = `<div class="msg-text">${msg}</div>`;
 
-  chatlog.appendChild(msgElement);
-  chatlog.scrollTop = chatlog.scrollHeight;
+    chatlog.appendChild(msgElement);
+    chatlog.scrollTop = chatlog.scrollHeight;
     fetch("http://localhost:3000/discussion", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-          message: newMsg
-      })
-    })
-      .then((res) => res.json())
-      .then((data) => {
-      const reply = data.completion
-      console.log(reply)
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                message: newMsg
+            })
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            const reply = data.completion
+            console.log(reply)
 
-        let regex = /([\d]+\. )(.*?)(?=([\d]+\.)|($))/g
-        let matches = reply.match(regex)
-        console.log(matches)  
-        matches.forEach(str => {
-          const msgElement = document.createElement("div");
-          msgElement.classList.add([`${str[0]}`]);
-          msgElement.innerHTML = `<div class="msg-text discussionpoint m-5 md:mx-8 font-semibold">${str}</div>`
-          chatlog.appendChild(msgElement);
-          chatlog.scrollTop = chatlog.scrollHeight;
-          window.scrollTo(0, document.body.scrollHeight)
-          const deleteButton = document.createElement("button")
-        deleteButton.textContent = "Delete node";
-        chatlog.appendChild(deleteButton)
-        deleteButton.scrollTop = chatlog.scrollHeight
-        const classesToAdd = ["w-1/2", "mx-auto", "transition", "duration-300", "ease-in-out", "rounded", "p-2", "hover:bg-blue-400", "hover:text-white", "mx-5", "my-2"]
-        classesToAdd.forEach(cls => {
-          deleteButton.classList.add(cls)
-        })
-        deleteButton.addEventListener("click", () => {
-          chatlog.removeChild(msgElement)
-          chatlog.removeChild(deleteButton)
-        })
+            let regex = /([\d]+\. )(.*?)(?=([\d]+\.)|($))/g
+            let matches = reply.match(regex)
+            console.log(matches)
+            matches.forEach(str => {
+                const msgElement = document.createElement("div");
+                msgElement.classList.add([`${str[0]}`]);
+                msgElement.innerHTML = `<div class="msg-text discussionpoint m-5 md:mx-8 font-semibold">${str}</div>`
+                chatlog.appendChild(msgElement);
+                chatlog.scrollTop = chatlog.scrollHeight;
+                window.scrollTo(0, document.body.scrollHeight)
+                const deleteButton = document.createElement("button")
+                deleteButton.textContent = "Delete node";
+                chatlog.appendChild(deleteButton)
+                deleteButton.scrollTop = chatlog.scrollHeight
+                const classesToAdd = ["w-1/2", "mx-auto", "transition", "duration-300", "ease-in-out", "rounded", "p-2", "hover:bg-blue-400", "hover:text-white", "mx-5", "my-2"]
+                classesToAdd.forEach(cls => {
+                    deleteButton.classList.add(cls)
+                })
+                deleteButton.addEventListener("click", () => {
+                    chatlog.removeChild(msgElement)
+                    chatlog.removeChild(deleteButton)
+                })
+            });
+            const generate = document.getElementById("generatebox")
+            const generateBtn = document.createElement('button')
+            generateBtn.textContent = 'Generate Bot'
+            const classesToAdd = ["w-1/2", "mx-auto", "transition", "duration-300", "ease-in-out", "rounded", "p-2", "hover:bg-blue-400", "hover:text-white", "mx-5", "my-2"]
+            classesToAdd.forEach(cls => {
+                generateBtn.classList.add(cls)
+            })
+            generate.appendChild(generateBtn)
+            const pointsArray = []
+            generateBtn.addEventListener("click", (e) => {
+                const points = document.querySelectorAll('div.discussionpoint')
+                points.forEach(point => {
+                    pointsArray.push(point.textContent.replace(/[0-9]\./g, "\n"))
+                })
+                e.preventDefault
+                fetch("http://localhost:3000/bot", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        message: pointsArray
+                    })
+                })
+                if (data.hasOwnProperty("final") && data.final === true) {
+                    const msgElement = document.createElement("div");
+                    msgElement.classList.add(["message", "message-received"]);
+                    console.log("true")
+                    const remove = copyToClip(regex, reply, chatlog)
+                    msgElement.innerHTML = `<div class="msg-text m-5 md:mx-8 font-semibold">${reply.replace(remove, "").replace(/'{2,3}/g, "")}</div>`
+                }
+
+            })
         });
-        const generate = document.getElementById("generatebox")
-        const generateBtn = document.createElement('button')
-        generateBtn.textContent = 'Generate Bot'
-        const classesToAdd = ["w-1/2", "mx-auto", "transition", "duration-300", "ease-in-out", "rounded", "p-2", "hover:bg-blue-400", "hover:text-white", "mx-5", "my-2"]
-        classesToAdd.forEach(cls => {
-          generateBtn.classList.add(cls)
-        })
-        generate.appendChild(generateBtn)
-        const pointsArray = []
-        generateBtn.addEventListener("click", (e) => {
-          const points = document.querySelectorAll('div.discussionpoint')
-          points.forEach(point => {
-            pointsArray.push(point.textContent.replace(/[0-9]\./g, "\n"))
-          })
-          e.preventDefault
-          fetch("http://localhost:3000/bot", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({message: pointsArray})
-    })
-          if (data.hasOwnProperty("final") && data.final===true){
-        const msgElement = document.createElement("div");
-        msgElement.classList.add(["message", "message-received"]);
-        console.log("true")
-        const remove = copyToClip(regex, reply, chatlog)
-        msgElement.innerHTML = `<div class="msg-text m-5 md:mx-8 font-semibold">${reply.replace(remove, "").replace(/'{2,3}/g, "")}</div>`
-      }
-
-        })
-      })
-      ;
 });
