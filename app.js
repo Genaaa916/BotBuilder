@@ -87,8 +87,7 @@ allButtons.forEach(group => {
 submit.addEventListener("click", (e) => {
   userChoice["industry"] = industry.value
   userChoice["additional"] = add.value
-  userChoice["start"] = start.value
-  userChoice["end"] = end.value
+
 
 
 if(!choiceSent){
@@ -117,22 +116,7 @@ msgElement.innerHTML = `<div class="msg-text">${msg}</div>`;
     })
       .then((res) => res.json())
       .then((data) => {
-      
-      const reply = data.completion.content
-/*       let newMsg = {"role": "assistant", "content": `${reply}`}
-      msg_array.push(newMsg) */
-      const msgElement = document.createElement("div");
-      msgElement.classList.add(["message", "message-received"]);
-      if (!reply.match(regex)){
-        msgElement.innerHTML = `<div class="msg-text m-5 md:mx-8 font-semibold">${reply}</div>`
-      } 
-      chatlog.appendChild(msgElement);
-      chatlog.scrollTop = chatlog.scrollHeight;
-      window.scrollTo(0, document.body.scrollHeight)
-      if (reply.match(regex)){
-        const remove = copyToClip(regex, reply, chatlog)
-        msgElement.innerHTML = `<div class="msg-text m-5 md:mx-8 font-semibold">${reply.replace(remove, "").replace(/'{2,3}/g, "")}</div>` 
-      }
+        console.log(data)
       });
   
 });

@@ -13,7 +13,7 @@ const config = new Configuration ({
     apiKey : process.env.OPENAI_API_KEY,
 })
 const openai = new OpenAIApi(config);
-
+const regex = /\{.+\}/gs
 const app = express();
 const port = 3000;
 app.use(cors());
@@ -65,7 +65,17 @@ console.log(req.body)
             {role: "system", content: systemMsg}, prompt
         ]
     })
-    res.json({completion: completion.data.choices[0].message})
+    const gptmessage = completion.data.choices[0].message.content
+
+
+    const gptresponse = {completion: gptmessage}
+    console.log(gptresponse)
+    if(gptmessage.match(regex)){
+        gptresponse.final=true;
+    } else {
+        gptresponse.final=false
+    }
+    res.json(gptresponse)
 })
 
 app.listen(port, () => {
