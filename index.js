@@ -37,7 +37,9 @@ app.post('/chat', async (req, res) => {
         industry: choiceData[0].industry.toLowerCase(), 
         useCase: choiceData[0].useCase.toLowerCase(), 
         tone:choiceData[0].tone.toLowerCase(), 
-        additional: choiceData[0].additional.toLowerCase()
+        additional: choiceData[0].additional.toLowerCase(),
+        start:choiceData[0].start.toLowerCase(),
+        end:choiceData[0].end.toLowerCase()
     }
     
 const getExampleJSON = async filePath => {
