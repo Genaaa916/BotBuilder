@@ -116,7 +116,20 @@ msgElement.innerHTML = `<div class="msg-text">${msg}</div>`;
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
+      const reply = data.completion
+      console.log(data)
+      const msgElement = document.createElement("div");
+      msgElement.classList.add(["message", "message-received"]);
+      if (data.hasOwnProperty("final") && data.final===true){
+        console.log("true")
+        const remove = copyToClip(regex, reply, chatlog)
+        msgElement.innerHTML = `<div class="msg-text m-5 md:mx-8 font-semibold">${reply.replace(remove, "").replace(/'{2,3}/g, "")}</div>`
+      } 
+      else{
+        msgElement.innerHTML = `<div class="msg-text m-5 md:mx-8 font-semibold">${reply}</div>`
+        chatlog.appendChild(msgElement);
+        chatlog.scrollTop = chatlog.scrollHeight;
+        window.scrollTo(0, document.body.scrollHeight)}
       });
   
 });
