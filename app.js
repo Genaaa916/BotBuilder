@@ -1,6 +1,7 @@
 let msg_array = []
 const chatlog = document.getElementById("chatlog");
 const industry = document.getElementById("industry")
+
 const add = document.getElementById("add")
 const end = document.getElementById("end")
 const start = document.getElementById("start")
