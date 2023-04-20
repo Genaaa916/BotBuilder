@@ -123,12 +123,16 @@ submit.addEventListener("click", (e) => {
       let matches = reply.match(regex)
       console.log(matches)
       matches.forEach(str => {
-        const msgElement = document.createElement("ul");
+        const msgElement = document.createElement("div");
         chatlog.appendChild(msgElement);
-        msgElement.outerHTML = `<li class="msg-text p-2 border rounded border-black-400 discussionpoint m-5 md:mx-8 list-decimal font-semibold">${str.replace(/[0-9]\./g, "")}</li>`
+        msgElement.innerHTML = `<div class="discussionpoint"><div class="msg-text m-5 md:mx-8 font-semibold">${str}</div></div>`
         chatlog.scrollTop = chatlog.scrollHeight;
         window.scrollTo(0, document.body.scrollHeight)
         const deleteButton = document.createElement("button")
+        deleteButton.addEventListener("click", (e) => {
+          e.preventDefault
+          chatlog.removeChild(msgElement)
+        })
         msgElement.appendChild(deleteButton)
         deleteButton.textContent = "Delete node";
         deleteButton.scrollTop = chatlog.scrollHeight
@@ -149,9 +153,9 @@ submit.addEventListener("click", (e) => {
   generate.appendChild(generateBtn)
   const pointsArray = []
   generateBtn.addEventListener("click", (e) => {
-    const points = document.querySelectorAll('li.discussionpoint')
+    const points = document.querySelectorAll('div.discussionpoint')
     points.forEach(point => {
-      pointsArray.push(point.textContent)
+      pointsArray.push(point.textContent.replace(/[0-9]\./g, "\n"))
     })
 
     e.preventDefault
