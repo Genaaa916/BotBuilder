@@ -6,6 +6,98 @@
     <meta name="viewport" content="width='device-width', initial-scale=1.0" />
     <title>Chatbot generator</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+    <script>
+      $.fn.drag = function (selector) {
+        var container = $(this);
+        var draggedItem;
+        var itemPositions = [];
+
+        container.on("mousedown", ".discussionpoint", function (e) {
+          itemPositions = container.find(".discussionpoint").map(function () {
+            return $(this).position();
+          });
+
+          console.log(itemPositions);
+
+          draggedItem = $(this);
+          clone = draggedItem.clone();
+
+          clone.addClass("clone");
+          draggedItem.addClass("dragging");
+
+          var position = draggedItem.position();
+
+          clone.offsetX = e.originalEvent.clientX - position.left;
+          clone.offsetY = e.originalEvent.clientY - position.top;
+
+          clone.css({
+            position: "fixed",
+            left: position.left,
+            top: position.top,
+          });
+
+          container.append(clone);
+
+          $(window).bind("mousemove", moveDraggedItem);
+          $(window).bind("mouseup", dropDraggedItem);
+          $(container).bind("mouseover", ".discussionpoint", moveItems);
+          container.find(".discussionpoint").each(function (index) {
+            $(this).css({
+              position: "fixed",
+              top: itemPositions[index].top,
+              left: itemPositions[index].left,
+            });
+          });
+        });
+
+        function moveItems(e) {
+          var target = $(e.target);
+          if (target.hasClass("discussionpoint")) {
+            if (draggedItem.prev()[0] == target[0]) {
+              target.insertAfter(draggedItem);
+            } else if (draggedItem.next()[0] == target[0]) {
+              target.insertBefore(draggedItem);
+            } else {
+              if (draggedItem.index() > target.index())
+                draggedItem.insertBefore(target);
+              else draggedItem.insertAfter(target);
+            }
+
+            container.find(".discussionpoint").each(function (index) {
+              $(this).css({
+                top: itemPositions[index].top,
+                left: itemPositions[index].left,
+              });
+            });
+          }
+        }
+
+        function dropDraggedItem(e) {
+          $(window).unbind("mousemove mouseup");
+          draggedItem.removeClass("dragging");
+          $(container).unbind("mouseover");
+          clone.remove();
+          container.find(".discussionpoint").css({
+            position: "",
+            top: "", //test
+            left: "",
+          });
+        }
+
+        function moveDraggedItem(e) {
+          clone.css({
+            left: e.originalEvent.clientX - clone.offsetX,
+            top: e.originalEvent.clientY - clone.offsetY,
+          });
+        }
+      };
+
+      $(function () {
+        $("#chatlog").drag(".discussionpoint");
+      });
+    </script>
   </head>
   <body
     class="font-sans tracking-tightest md:tracking-normal md:text-lg font-medium"
@@ -134,10 +226,9 @@
         >
           Generate
         </button>
-        <div id="chatlog"></div>
+        <div class="" id="chatlog"></div>
       </div>
     </div>
-
     <script type="module" src="app.js"></script>
   </body>
 </html>
