@@ -1,4 +1,4 @@
-const token = process.env.SECRET_TOKEN
+const token = SECRET_TOKEN
 let msg_array = []
 const chatlog = document.getElementById("chatlog");
 const industry = document.getElementById("industry")
