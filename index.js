@@ -60,7 +60,7 @@ app.post('/chat', async (req, res) => {
 
 
 
-        instructions.example = example
+        instructions.example = JSON.stringify(example)
 
 
         //systemMsg is the instructions for the chatbot, it should vary depending on user choices on the site.
