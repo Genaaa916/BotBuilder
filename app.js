@@ -16,7 +16,7 @@ let choiceSent = false
 
 
 const sendUserChoice = () => {
-  fetch("https://bot-builder.onrender.com/bot", {
+  fetch("https://bot-builder.onrender.com/choices", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -170,7 +170,7 @@ submit.addEventListener("click", function handleclickSubmit(e) {
       pointsArray.push(point.textContent.replace(/[0-9]\./g, "\n"))
     })
 
-    fetch("https://bot-builder.onrender.com/bot", {
+    fetch("https://bot-builder.onrender.com/discussion", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
