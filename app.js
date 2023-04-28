@@ -16,7 +16,7 @@ let choiceSent = false
 
 
 const sendUserChoice = () => {
-  fetch("https://bot-builder.onrender.com/choices", {
+  fetch("http://localhost:3000/choices", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -107,7 +107,7 @@ submit.addEventListener("click", function handleclickSubmit(e) {
   chatlog.appendChild(msgElement);
   /*   chatlog.scrollTop = chatlog.scrollHeight;
    */
-  fetch("https://bot-builder.onrender.com/discussion", {
+  fetch("http://localhost:3000/discussion", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -170,7 +170,7 @@ submit.addEventListener("click", function handleclickSubmit(e) {
       pointsArray.push(point.textContent.replace(/[0-9]\./g, "\n"))
     })
 
-    fetch("https://bot-builder.onrender.com/discussion", {
+    fetch("http://localhost:3000/bot", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
