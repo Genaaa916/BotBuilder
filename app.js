@@ -1,4 +1,4 @@
-const token = SECRET_TOKEN
+const token = Siteconfig.SECRET_TOKEN
 let msg_array = []
 const chatlog = document.getElementById("chatlog");
 const industry = document.getElementById("industry")
