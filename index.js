@@ -30,7 +30,7 @@ function checkApiKey(req, res, next) {
     next();
 }
 const corsOption = {
-    origin: ['https://3-5-partial-completion--radiant-kleicha-96d976.netlify.app/'],
+    origin: ['https://3-5-partial-completion--radiant-kleicha-96d976.netlify.app'],
 };
 const app = express();
 const port = 3000;
