@@ -1,4 +1,3 @@
-const token = Siteconfig.SECRET_TOKEN
 let msg_array = []
 const chatlog = document.getElementById("chatlog");
 const industry = document.getElementById("industry")
@@ -20,7 +19,6 @@ const sendUserChoice = () => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "x-api-key": token
     },
     body: JSON.stringify({
       userChoice
@@ -115,7 +113,6 @@ submit.addEventListener("click", (e) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-api-key": token
       },
       body: JSON.stringify({
         message: newMsg

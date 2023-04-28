@@ -29,16 +29,18 @@ function checkApiKey(req, res, next) {
     }
     next();
 }
-
+const corsOption = {
+    origin: ['https://3-5-partial-completion--radiant-kleicha-96d976.netlify.app/'],
+};
 const app = express();
 const port = 3000;
-app.use(cors());
+app.use(cors(corsOption));
 app.use(bodyParser.json());
 
 
 
 //for running in nodejs
-app.post('/choices', checkApiKey, async (req, res) => {
+app.post('/choices', async (req, res) => {
     try {
         choiceData = []
         const userChoice = req.body.userChoice;
@@ -54,7 +56,7 @@ app.post('/choices', checkApiKey, async (req, res) => {
 })
 
 
-app.post('/chat', checkApiKey, async (req, res) => {
+app.post('/chat', async (req, res) => {
     try {
         const prompt = req.body.message
         const instructions = {
