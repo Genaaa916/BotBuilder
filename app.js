@@ -15,7 +15,7 @@ let choiceSent = false
 
 
 const sendUserChoice = () => {
-  fetch("http://localhost:3000/choices", {
+  fetch("https://bot-builder.onrender.com/choices", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -109,7 +109,7 @@ submit.addEventListener("click", (e) => {
 
   chatlog.appendChild(msgElement);
   chatlog.scrollTop = chatlog.scrollHeight;
-  fetch("http://localhost:3000/chat", {
+  fetch("https://bot-builder.onrender.com/chat", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

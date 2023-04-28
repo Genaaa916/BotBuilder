@@ -1,4 +1,7 @@
 import {
+    example
+} from "./example.js";
+import {
     Configuration,
     OpenAIApi
 } from "openai";
@@ -48,17 +51,10 @@ app.post('/chat', async (req, res) => {
         end: choiceData[0].end.toLowerCase()
     }
 
-    const getExampleJSON = async filePath => {
-        try {
-            const data = await fs.promises.readFile(filePath, 'utf8')
-            return JSON.stringify(data).replace("inpage", instructions.botType).replaceAll("\\", "")
-        } catch (err) {
-            console.log(err)
-        }
-    }
 
 
-    instructions.example = await getExampleJSON('example.json')
+
+    instructions.example = example
 
 
     //systemMsg is the instructions for the chatbot, it should vary depending on user choices on the site.
