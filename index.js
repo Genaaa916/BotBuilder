@@ -20,6 +20,16 @@ const config = new Configuration({
 })
 const openai = new OpenAIApi(config);
 
+function checkApiKey(req, res, next) {
+    const apiKey = req.headers['x-api-key'];
+    if (!apiKey || !VALID_API_KEY.includes(apiKey)) {
+        return res.status(401).json({
+            error: 'Invalid API key'
+        });
+    }
+    next();
+}
+
 const app = express();
 const port = 3000;
 app.use(cors());
@@ -28,7 +38,7 @@ app.use(bodyParser.json());
 
 
 //for running in nodejs
-app.post('/choices', async (req, res) => {
+app.post('/choices', checkApiKey, async (req, res) => {
     try {
         choiceData = []
         const userChoice = req.body.userChoice;
@@ -44,7 +54,7 @@ app.post('/choices', async (req, res) => {
 })
 
 
-app.post('/chat', async (req, res) => {
+app.post('/chat', checkApiKey, async (req, res) => {
     try {
         const prompt = req.body.message
         const instructions = {

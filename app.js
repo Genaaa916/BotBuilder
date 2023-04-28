@@ -1,3 +1,4 @@
+const token = SECRET_TOKEN
 let msg_array = []
 const chatlog = document.getElementById("chatlog");
 const industry = document.getElementById("industry")
@@ -15,10 +16,11 @@ let choiceSent = false
 
 
 const sendUserChoice = () => {
-  fetch("https://bot-builder.onrender.com/choices", {
+  fetch("http://localhost:3000/choices", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "x-api-key": token
     },
     body: JSON.stringify({
       userChoice
@@ -109,10 +111,11 @@ submit.addEventListener("click", (e) => {
 
   chatlog.appendChild(msgElement);
   chatlog.scrollTop = chatlog.scrollHeight;
-  fetch("https://bot-builder.onrender.com/chat", {
+  fetch("http://localhost:3000/chat", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "x-api-key": token
       },
       body: JSON.stringify({
         message: newMsg
