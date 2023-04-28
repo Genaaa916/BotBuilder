@@ -9,105 +9,28 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
     <script>
-      $.fn.drag = function (selector) {
-        var container = $(this);
-        var draggedItem;
-        var itemPositions = [];
-
-        container.on("mousedown", ".discussionpoint", function (e) {
-          itemPositions = container.find(".discussionpoint").map(function () {
-            return $(this).position();
+      $(document.getElementById("chatlog")).ready(
+        $(function () {
+          $("#chatlog").sortable({
+            // options for the sortable div
           });
 
-          console.log(itemPositions);
-
-          draggedItem = $(this);
-          clone = draggedItem.clone();
-
-          clone.addClass("clone");
-          draggedItem.addClass("dragging");
-
-          var position = draggedItem.position();
-
-          clone.offsetX = e.originalEvent.clientX - position.left;
-          clone.offsetY = e.originalEvent.clientY - position.top;
-
-          clone.css({
-            position: "fixed",
-            left: position.left,
-            top: position.top,
+          $(".discussionpoint").draggable({
+            // options for the draggable items
           });
-
-          container.append(clone);
-
-          $(window).bind("mousemove", moveDraggedItem);
-          $(window).bind("mouseup", dropDraggedItem);
-          $(container).bind("mouseover", ".discussionpoint", moveItems);
-          container.find(".discussionpoint").each(function (index) {
-            $(this).css({
-              position: "fixed",
-              top: itemPositions[index].top,
-              left: itemPositions[index].left,
-            });
-          });
-        });
-
-        function moveItems(e) {
-          var target = $(e.target);
-          if (target.hasClass("discussionpoint")) {
-            if (draggedItem.prev()[0] == target[0]) {
-              target.insertAfter(draggedItem);
-            } else if (draggedItem.next()[0] == target[0]) {
-              target.insertBefore(draggedItem);
-            } else {
-              if (draggedItem.index() > target.index())
-                draggedItem.insertBefore(target);
-              else draggedItem.insertAfter(target);
-            }
-
-            container.find(".discussionpoint").each(function (index) {
-              $(this).css({
-                top: itemPositions[index].top,
-                left: itemPositions[index].left,
-              });
-            });
-          }
-        }
-
-        function dropDraggedItem(e) {
-          $(window).unbind("mousemove mouseup");
-          draggedItem.removeClass("dragging");
-          $(container).unbind("mouseover");
-          clone.remove();
-          container.find(".discussionpoint").css({
-            position: "",
-            top: "",
-            left: "",
-          });
-        }
-
-        function moveDraggedItem(e) {
-          clone.css({
-            left: e.originalEvent.clientX - clone.offsetX,
-            top: e.originalEvent.clientY - clone.offsetY,
-          });
-        }
-      };
-
-      $(function () {
-        $("#chatlog").drag(".discussionpoint");
-      });
+        })
+      );
     </script>
   </head>
   <body
-    class="font-sans tracking-tightest md:tracking-normal md:text-lg font-medium"
+    class="font-sans tracking-tightest md:tracking-normal text-xs md:text-lg md:font-medium"
   >
     <div
       class="flex flex-col w-full px-5 lg:px-2 lg:w-1/2 mx-auto text-center pt-8 pb-4"
       id="wrapper"
     >
       <h1
-        class="pb-8 text-4xl sm:text-6xl font-extrabold leading-none tracking-tighter text-gray-900 lg:text-8xl"
+        class="pb-8 text-4xl sm:text-6xl drop-shadow-lg font-extrabold leading-none tracking-tighter text-gray-900 lg:text-8xl"
       >
         Build-a-<span
           class="px-2 text-white bg-blue-600 tracking-widest rounded dark:bg-blue-400"
